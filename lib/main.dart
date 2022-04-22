@@ -4,7 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 /// Represenst a Cart Item. Has <int>`id`, <String>`name`, <int>`quantity`
-class CartItem {}
+class CartItem {
+  int id;
+  String name;
+  int quantity;
+
+  CartItem(this.id, this.name, this.quantity);
+}
 
 /// Manages a cart. Implements ChangeNotifier
 class CartState with ChangeNotifier {
@@ -13,19 +19,34 @@ class CartState with ChangeNotifier {
   CartState();
 
   /// The number of individual items in the cart. That is, all cart items' quantities.
-  int get totalCartItems => 0; // TODO: return actual cart volume.
+  // int get totalCartItems => 0; // return actual cart volume.
+  int get totalCartItems {
+    int count = 0;
+    // loop over _products array & add quantity prop to count.
+    _products.map((product) => {count += product.quantity});
+    return count;
+  }
 
   /// The list of CartItems in the cart
   List<CartItem> get products => _products;
 
-  /// Clears the cart. Notifies any consumers.
-  void clearCart() {}
+  /// Clears the cart. Notifies any consumers. <<<  *** Notify consumers incomplete. ??? asuming thats change notifier
+  void clearCart() {
+    _products = [];
+  }
 
   /// Adds a new CartItem to the cart. Notifies any consumers.
-  void addToCart({required CartItem item}) {}
+  void addToCart({required CartItem item}) {
+    // praying this is spread syntax
+    _products = [..._products, item];
+  }
 
   /// Updates the quantity of the Cart item with this id. Notifies any consumers.
-  void updateQuantity({required int id, required int newQty}) {}
+  void updateQuantity({required int id, required int newQty}) {
+    _products.map((cartItem) => {
+          if (cartItem.id == id) {cartItem.quantity = newQty}
+        });
+  }
 }
 
 void main() {
