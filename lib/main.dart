@@ -77,6 +77,7 @@ class MyCartApp extends StatelessWidget {
   }
 }
 
+// 2x incomplete (provider)
 class CartControls extends StatelessWidget {
   /// Handler for Add Item pressed
   void _addItemPressed(BuildContext context) {
@@ -86,13 +87,15 @@ class CartControls extends StatelessWidget {
     String nextCartItemName = 'A cart item';
     int nextCartItemQuantity = 1;
 
-    CartItem
-        item; // Actually use the CartItem constructor to assign id, name and quantity
+    // Actually use the CartItem constructor to assign id, name and quantity
+    CartItem item =
+        CartItem(nextCartItemId, nextCartItemName, nextCartItemQuantity);
 
     // TODO: Get the cart current state through Provider. Add this cart item to cart.
   }
 
-  /// Handle clear cart pressed. Should clear the cart
+  /// TODO: Handle clear cart pressed. Should clear the cart
+  // assuming i need to "provide" a reference to clearCart method in CartState
   void _clearCartPressed(BuildContext context) {}
 
   @override
@@ -121,12 +124,19 @@ class CartControls extends StatelessWidget {
   }
 }
 
+// incomplete x 3 --> text widget displaying current item quantity needs state reference.
+// buttons calling onPress methods improperly.
 class ListOfCartItems extends StatelessWidget {
   /// Handles adding 1 to the current cart item quantity.
+  /// provide refernce to _products in card state
+  /// map products & increment quantity of CartItem with matching id.
+  /// ask the boss about delta
   void _incrementQuantity(context, int id, int delta) {}
 
   /// Handles removing 1 to the current cart item quantity.
   /// Don't forget: we can't have negative numbers of an item in the cart
+  /// same logic as above just with --
+  /// & only execute if conditional check (quantity > 0) eval to True
   void _decrementQuantity(context, int id, int delta) {}
 
   @override
@@ -134,7 +144,12 @@ class ListOfCartItems extends StatelessWidget {
     return Consumer<CartState>(
         builder: (BuildContext context, CartState cart, Widget? child) {
       if (cart.totalCartItems == 0) {
-        // TODO: return a Widget that tells us there are no items in the cart
+        // Return a Widget that tells us there are no items in the cart
+        return Text(
+          "There are no items in your cart.",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 24),
+        );
       }
 
       return Column(children: [
@@ -145,9 +160,24 @@ class ListOfCartItems extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 // TODO: Widget for the line item name AND current quantity, eg "Item name x 4".
+                Text("Item name x STRING INTERPOLATION WITH PROVIDER"),
                 //  Current quantity should update whenever a change occurs.
                 // TODO: Button to handle incrementing cart quantity. Handler is above.
+                ElevatedButton(
+                  child: Icon(Icons.add),
+                  onPressed: () {
+                    // since this should take args I'm assuming I will use the provider lib
+                    _incrementQuantity;
+                  },
+                ),
                 // TODO: Button to handle decrementing cart quantity. Handler is above.
+                ElevatedButton(
+                  child: Icon(Icons.remove),
+                  onPressed: () {
+                    // provider lib knowledge needed.
+                    _decrementQuantity;
+                  },
+                ),
               ],
             ),
           ),
